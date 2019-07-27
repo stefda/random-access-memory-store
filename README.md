@@ -1,4 +1,4 @@
-# Better Queue - Memory Store
+# Random Access Memory Store
 
 Ephemeral store with random access for [better-queue](https://github.com/diamondio/better-queue).
 
