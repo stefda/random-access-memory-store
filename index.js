@@ -25,22 +25,22 @@ function removeRandom(arr) {
   return taskId;
 }
 
-function RandomAccessStore() {
+function RandomAccessMemoryStore() {
   this._queue = [];      // Array of taskIds
   this._tasks = {};      // Map of taskId => task
   this._priorities = {}; // Map of taskId => priority
   this._running = {};    // Map of lockId => taskIds
 }
 
-RandomAccessStore.prototype.connect = function (cb) {
+RandomAccessMemoryStore.prototype.connect = function (cb) {
   cb(null, this._queue.length);
 };
 
-RandomAccessStore.prototype.getTask = function (taskId, cb) {
+RandomAccessMemoryStore.prototype.getTask = function (taskId, cb) {
   return cb(null, this._tasks[taskId]);
 };
 
-RandomAccessStore.prototype.deleteTask = function (taskId, cb) {
+RandomAccessMemoryStore.prototype.deleteTask = function (taskId, cb) {
   var self = this;
   var hadTask = self._tasks[taskId];
   delete self._tasks[taskId];
@@ -51,7 +51,7 @@ RandomAccessStore.prototype.deleteTask = function (taskId, cb) {
   cb();
 };
 
-RandomAccessStore.prototype.putTask = function (taskId, task, priority, cb) {
+RandomAccessMemoryStore.prototype.putTask = function (taskId, task, priority, cb) {
   var self = this;
   var hadTask = self._tasks[taskId];
   self._tasks[taskId] = task;
@@ -93,24 +93,24 @@ function takeRandom(n, cb) {
   cb(null, lockId);
 }
 
-RandomAccessStore.prototype.takeFirstN = takeRandom;
+RandomAccessMemoryStore.prototype.takeFirstN = takeRandom;
 
-RandomAccessStore.prototype.takeLastN = takeRandom;
+RandomAccessMemoryStore.prototype.takeLastN = takeRandom;
 
-RandomAccessStore.prototype.getLock = function (lockId, cb) {
+RandomAccessMemoryStore.prototype.getLock = function (lockId, cb) {
   var self = this;
   cb(null, self._running[lockId]);
 };
 
-RandomAccessStore.prototype.getRunningTasks = function (cb) {
+RandomAccessMemoryStore.prototype.getRunningTasks = function (cb) {
   var self = this;
   cb(null, self._running);
 };
 
-RandomAccessStore.prototype.releaseLock = function (lockId, cb) {
+RandomAccessMemoryStore.prototype.releaseLock = function (lockId, cb) {
   var self = this;
   delete self._running[lockId];
   cb();
 };
 
-module.exports = RandomAccessStore;
+module.exports = RandomAccessMemoryStore;
